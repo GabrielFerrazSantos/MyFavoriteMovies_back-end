@@ -14,11 +14,12 @@ public class UserService {
     private UserRepository repository;
 
     public ResponseEntity<UserDTO> getUserById(Long id) {
-        var user = repository.findById(id);
-
-        return user
+        return repository
+                .findById(id)
                 .map(value -> ResponseEntity.ok(new UserDTO(value)))
-                .orElseGet(() -> ResponseEntity.noContent().build());
+                .orElseGet(() -> ResponseEntity
+                        .noContent()
+                        .build());
     }
 
     public ResponseEntity<UserDTO> createUser(UserRequest userRequest) {

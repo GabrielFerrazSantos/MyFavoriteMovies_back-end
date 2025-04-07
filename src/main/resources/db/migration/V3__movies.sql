@@ -1,0 +1,12 @@
+IF OBJECT_ID(N'dbo.tbl_movie', N'U') IS NULL BEGIN
+	CREATE TABLE tbl_movie (
+		id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+		title VARCHAR(100) NOT NULL,
+		director VARCHAR(50) NOT NULL,
+		storyline VARCHAR(MAX) NOT NULL,
+		poster VARCHAR(MAX) NOT NULL,
+		release_date DATE NOT NULL,
+		duration VARCHAR(3) NOT NULL,
+		genre VARCHAR(20) NOT NULL
+	);
+END

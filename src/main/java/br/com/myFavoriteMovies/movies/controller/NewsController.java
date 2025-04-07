@@ -1,6 +1,7 @@
 package br.com.myFavoriteMovies.movies.controller;
 
 import br.com.myFavoriteMovies.movies.dto.NewsDTO;
+import br.com.myFavoriteMovies.movies.request.NewsRequest;
 import br.com.myFavoriteMovies.movies.service.NewsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,17 @@ public class NewsController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<NewsDTO>> getAllNews() {
         return service.getAllNews();
+    }
+
+    @GetMapping(value = "/news/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<NewsDTO> getNewsById(@PathVariable(value = "id") Long id) {
+        return service.getNewsById(id);
+    }
+
+    @PostMapping(value = "/news")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<NewsDTO> createNews(@RequestBody NewsRequest newsRequest) {
+        return service.createNews(newsRequest);
     }
 }
