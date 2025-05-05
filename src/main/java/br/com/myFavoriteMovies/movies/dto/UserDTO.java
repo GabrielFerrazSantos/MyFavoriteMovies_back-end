@@ -21,7 +21,7 @@ public class UserDTO {
         this.username = user.getUsername();
     }
 
-    private int id;
+    private long id;
     private String name;
     private String username;
 }

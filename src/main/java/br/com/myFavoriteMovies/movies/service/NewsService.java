@@ -8,9 +8,12 @@ import br.com.myFavoriteMovies.movies.repository.NewsRepository;
 import br.com.myFavoriteMovies.movies.repository.TagRepository;
 import br.com.myFavoriteMovies.movies.request.NewsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -24,7 +27,13 @@ public class NewsService {
         var newsDTOs = newsRepository
                 .findAllByOrderByDateDesc()
                 .stream()
-                .map(NewsDTO::new)
+                .map(value -> {
+                    try {
+                        return new NewsDTO(value);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .toList();
 
         newsDTOs.forEach(news -> {
@@ -38,24 +47,17 @@ public class NewsService {
         return ResponseEntity.ok(newsDTOs);
     }
 
-    public ResponseEntity<NewsDTO> getNewsById(long id) {
-        var newsEntity = newsRepository.findById(id);
+    public ResponseEntity<NewsDTO> getNewsById(long id) throws IOException {
+        var newsEntity = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        var newsDTO = new NewsDTO(newsEntity);
 
-        if (newsEntity.isPresent()) {
-            var newsDTO = new NewsDTO(newsEntity.get());
+        newsDTO.setTags(tagRepository
+                .findAllByNewsId(newsDTO.getId())
+                .stream()
+                .map(TagEntity::getName)
+                .toList());
 
-            newsDTO.setTags(tagRepository
-                    .findAllByNewsId(newsDTO.getId())
-                    .stream()
-                    .map(TagEntity::getName)
-                    .toList());
-
-            return ResponseEntity.ok(newsDTO);
-        } else {
-            return ResponseEntity
-                    .noContent()
-                    .build();
-        }
+        return ResponseEntity.ok(newsDTO);
     }
 
     public ResponseEntity<NewsDTO> createNews(NewsRequest newsRequest) {

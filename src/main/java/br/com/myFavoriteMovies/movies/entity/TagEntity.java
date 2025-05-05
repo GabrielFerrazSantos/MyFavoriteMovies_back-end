@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tbl_tag")
 public class TagEntity {
-    public TagEntity(int newsId, String tag) {
+    public TagEntity(long newsId, String tag) {
         this.newsId = newsId;
         this.name = tag;
     }
@@ -20,10 +20,10 @@ public class TagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "news_id")
-    private int newsId;
+    private long newsId;
 
     @Column(name = "name")
     private String name;
