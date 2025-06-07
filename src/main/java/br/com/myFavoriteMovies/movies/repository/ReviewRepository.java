@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     List<ReviewEntity> findAllByMovieIdOrderByDateDesc(long id);
+    List<ReviewEntity> findAllByUserIdOrderByDateDesc(long id);
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CommentaryRepository extends JpaRepository<CommentaryEntity, Long> {
     List<CommentaryEntity> findAllByNewsIdOrderByDateDesc(long id);
+    List<CommentaryEntity> findAllByUserIdOrderByDateDesc(long id);
 }
